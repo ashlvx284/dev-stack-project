@@ -55,5 +55,52 @@ font-weight:500;
 }
 
 .btn-signup{
+    background-color: #2563eb;
+    color: #ffffff;
+}
+
+.hero{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 50px 40px;
     background-color: #ffffff;
+    border-bottom:1px solid#e2e8f0 ;
+}
+.hero-text{max-width: 550px;}
+
+.hero-text h1{
+    font-size: 36px;
+    margin-bottom: 15px;
+}
+
+.hero-text h1 span{
+    color: #2563eb;
+}
+
+.hero-text p{
+    color:#64748b;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.hero-btns button{
+    padding: 10px 20px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    margin-right: 10px;
+}
+
+.btn-primary{background-color: #2563eb;
+color: #ffffff;}
+
+.btn-secondary{
+    background-color: #e2e8f0;
+    color: #334155;
+}
+
+.hero-img img{
+    max-width: 380px;
 }
