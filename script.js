@@ -1,34 +1,121 @@
+// ১. HTML Elements ধরা
+const cardGrid = document.querySelector('.card-grid');
+const cartEmpty = document.querySelector('.cart-empty');
+const stackCount = document.querySelector('.stack-count');
+const btnRemoveAll = document.querySelector('.btn-remove-all');
+
 let cart = [];
-function addToCart(name){
-    if(!cart.includes(name)) {
-        cart.push(name);
-        updateCartUI();
-    }
+
+// ২. ছবির সাথে মিল রেখে ১২টি টেকনোলজি ডেটা (ইমোজি সহ)
+const techData = [
+  { name: 'React', desc: 'A declarative, component-based JavaScript library for building UI.', tag: 'Popular', cat: 'Frontend', level: 'Beginner-Friendly', rating: '4.9', icon: '⚛️' },
+  { name: 'Vue.js', desc: 'An approachable, performant and versatile framework for building web UI.', tag: 'Versatile', cat: 'Frontend', level: 'Beginner-Friendly', rating: '4.8', icon: '🟢' },
+  { name: 'Svelte', desc: 'Cybernetically enhanced web apps with compile-time reactivity.', tag: 'Fast', cat: 'Frontend', level: 'Intermediate', rating: '4.8', icon: '🔥' },
+  { name: 'Next.js', desc: 'The React framework for full-stack web applications with hybrid static.', tag: 'Popular', cat: 'Frontend', level: 'Intermediate', rating: '4.9', icon: '▲' },
+  { name: 'Node.js', desc: 'An asynchronous event-driven JavaScript runtime built on V8 engine.', tag: 'Standard', cat: 'Backend', level: 'Intermediate', rating: '4.8', icon: '🟩' },
+  { name: 'PostgreSQL', desc: 'A powerful, open-source object-relational database system.', tag: 'Top SQL', cat: 'Database', level: 'Intermediate', rating: '4.9', icon: '🐘' },
+  { name: 'Redis', desc: 'In-memory data structure store used as a high-speed database & cache.', tag: 'Cache', cat: 'Database', level: 'Intermediate', rating: '4.8', icon: '🟥' },
+  { name: 'JavaScript', desc: 'The versatile, ubiquitous scripting language powering dynamic behavior.', tag: 'Ubiquitous', cat: 'Language', level: 'Beginner-Friendly', rating: '4.9', icon: '🟨' },
+  { name: 'TypeScript', desc: 'A strongly typed programming language that builds on JavaScript.', tag: 'Essential', cat: 'Language', level: 'Intermediate', rating: '4.9', icon: '📘' },
+  { name: 'Java', desc: 'A secure, object-oriented programming language designed for portability.', tag: 'Robust', cat: 'Language', level: 'Intermediate', rating: '4.6', icon: '☕' },
+  { name: 'Tailwind CSS', desc: 'A utility-first CSS framework packed with classes that can be composed.', tag: 'Modern', cat: 'Styling', level: 'Beginner-Friendly', rating: '4.9', icon: '🎨' },
+  { name: 'Docker', desc: 'A platform designed to build, share, and run containerized applications.', tag: 'Containers', cat: 'DevOps', level: 'Intermediate', rating: '4.9', icon: '🐳' }
+];
+
+// ৩. কার্ড রেন্ডার করা (Select & Disabled লজিক সহ)
+function showCards() {
+  cardGrid.innerHTML = '';
+  techData.forEach((tech) => {
+    const isAdded = cart.some(item => item.name === tech.name);
+    const div = document.createElement('div');
+    div.className = 'card';
+    
+    div.innerHTML = `
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 28px;">${tech.icon}</span>
+        <span style="font-size: 10px; background: #eff6ff; color: #2563eb; padding: 2px 6px; border-radius: 4px; font-weight: bold;">${tech.tag}</span>
+      </div>
+      <h4 style="text-align: left; margin-top: 10px;">${tech.name}</h4>
+      <p style="text-align: left; font-size: 11px; color: #64748b; height: 35px; overflow: hidden;">${tech.desc}</p>
+      <div style="display: flex; justify-content: space-between; font-size: 11px; color: #94a3b8; margin: 10px 0;">
+        <span>${tech.cat}</span>
+        <span>${tech.level}</span>
+        <span style="color: #f59e0b;">★ ${tech.rating}</span>
+      </div>
+      <button class="btn-add" 
+        style="background: ${isAdded ? '#94a3b8' : '#0f172a'}; 
+               color: white; 
+               width: 100%; 
+               padding: 8px; 
+               border-radius: 6px; 
+               border: none; 
+               cursor: ${isAdded ? 'not-allowed' : 'pointer'};" 
+        ${isAdded ? 'disabled' : ''} 
+        onclick="addToCart('${tech.name}', '${tech.cat}', '${tech.icon}')">
+        ${isAdded ? 'Added' : 'Add to Stack'}
+      </button>
+    `;
+    cardGrid.appendChild(div);
+  });
 }
 
-function removeFromCart(index) {
-    cart.splice(index,1);
-    updateCartUI();
+// ৪. কার্টে আইটেম যুক্ত করা
+function addToCart(name, cat, icon) {
+  if (!cart.some(item => item.name === name)) {
+    cart.push({ name, cat, icon });
+    updateCart();
+    showCards(); // কার্ড রি-রেন্ডার করে বাটন ডিজেবল করবে
+  }
 }
 
-function updateCartUI(){
-    const cartList= document.getElementById('cart-list');
-    const emptyMsg= document.getElementById('empty-msg');
-
-
-if(cart.length===0){
-    emptyMsg.style.display= 'block';
-    cartList.innerHTML='';
+// ৫. কার্ট থেকে বাদ দেওয়া
+function removeFromCart(name) {
+  cart = cart.filter(item => item.name !== name);
+  updateCart();
+  showCards(); // বাটন আবার আগের মতো সক্রিয় করবে
 }
 
-else{
-    emptyMsg.style.display= 'none';
+// ৬. কার্ট এবং ডানপাশের ইউআই (Your Stack) আপডেট করা
+function updateCart() {
+  stackCount.innerText = `${cart.length} technologies selected;`
 
+  if (cart.length === 0) {
+    cartEmpty.innerHTML = `<p style="color: #94a3b8; font-size: 13px;">No technologies selected yet</p>;`
+    return;
+  }
 
-    cartList.innerHTML= cart.map((item,index) =>`<li style="display: flex;justify-content:space-between;margin-bottom: 8px;">
-    <span>${item}</span>
-    <button onclick="removeFromCart(${index})" style="background:red;padding: 2px 6px;">X</button      
-    </li>`).join('');                             
-
+  cartEmpty.innerHTML = '';
+  cart.forEach((item) => {
+    const div = document.createElement('div');
+    div.style.cssText = 'display: flex; justify-content: space-between; align-items: center; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px 14px; margin-bottom: 10px; background: #fff;';
+    div.innerHTML = `
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 22px;">${item.icon}</span>
+        <div>
+          <h5 style="margin: 0; font-size: 13px; font-weight: bold; color: #0f172a;">${item.name}</h5>
+          <span style="font-size: 10px; color: #94a3b8;">${item.cat}</span>
+        </div>
+      </div>
+      <button onclick="removeFromCart('${item.name}')" style="background: none; border: none; color: #94a3b8; font-size: 16px; cursor: pointer;">✕</button>
+    `;
+    cartEmpty.appendChild(div);
+  });
 }
+
+// ৭. Clear All বাটন
+if (btnRemoveAll) {
+  btnRemoveAll.onclick = function () {
+    cart = [];
+    updateCart();
+    showCards();
+  };
 }
+
+// প্রজেক্ট রান করা
+showCards();
+
+
+
+
+
+
