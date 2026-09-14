@@ -67,7 +67,7 @@ font-weight:500;
     justify-content: space-between;
     align-items: center;
     padding: 50px 40px;
-    background-color: #ffffff;
+    background-color: #e9f6fc;
     border-bottom:1px solid#e2e8f0 ;
 }
 .hero-text{max-width: 550px;}
@@ -240,7 +240,7 @@ cursor: pointer;}
 }
 
 .socials a {
-  color: #64748b;
+  color: #20bd96;
   text-decoration: none;
   margin-right: 12px;
 }
@@ -257,7 +257,7 @@ cursor: pointer;}
 }
 
 .footer-links a {
-  color: #64748b;
+  color: #145ec7;
   text-decoration: none;
   display: block;
   margin-bottom: 8px;
@@ -266,12 +266,12 @@ cursor: pointer;}
 .footer-bottom {
   display: flex;
   justify-content: space-between;
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid #1b8072;
   padding-top: 20px;
 }
 
 .footer-bottom a {
-  color: #64748b;
+  color: #e04508;
   text-decoration: none;
   margin-left: 15px;
 }
